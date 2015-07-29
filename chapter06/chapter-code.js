@@ -176,3 +176,102 @@ function dataTable(data) {
 }
 
 console.log(drawTable(dataTable(MOUNTAINS)));
+
+var pile = {
+  elements: ["eggshell", "orange peel", "worm"],
+  get height() {
+    return this.elements.length;
+  },
+  set height(value) {
+    console.log("Ignoring attempt to set height to", value);
+  }
+}
+
+console.log(pile.height);
+pile.height = 100;
+
+Object.defineProperty(TextCell.prototype, "heightProp", {
+  get: function() { return this.text.length; }
+});
+
+var cell = new TextCell("no\nway");
+console.log(cell.heightProp);
+cell.heightProp = 100;
+console.log(cell.heightProp);
+
+function RTextCell(text) {
+  TextCell.call(this, text);
+}
+
+RTextCell.prototype = Object.create(TextCell.prototype);
+RTextCell.prototype.draw = function(width, height) {
+  var result = [];
+  for (var i = 0; i < height; i++) {
+    var line = this.text[i] || "";
+    result.push(repeat(" ", width - line.length) + line);
+  }
+
+  return result;
+}
+
+// Exercise 6.1
+function Vector(x, y) {
+  this.x = x;
+  this.y = y;
+}
+Vector.prototype.plus = function(other) {
+  return new Vector(this.x + other.x, this.y + other.y);
+};
+Vector.prototype.minus = function(other) {
+  return new Vector(this.x - other.x, this.y - other.y);
+};
+Object.defineProperty(Vector.prototype, "length", {
+  get: function() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+});
+
+console.log(new Vector(1, 2).plus(new Vector(2, 3)));
+// → Vector{x: 3, y: 5}
+console.log(new Vector(1, 2).minus(new Vector(2, 3)));
+// → Vector{x: -1, y: -1}
+console.log(new Vector(3, 4).length);
+// → 5
+
+// Exercise 6.3
+console.log("Exercise 6.3")
+function logFive(sequence) {
+  for (var i = 0; i < 5; i++) {
+    if (!sequence.next())
+      break;
+    console.log(sequence.current());
+  }
+}
+
+function ArraySeq(array) {
+  this.index = -1;
+  this.array = array;
+}
+ArraySeq.prototype.next = function() {
+  if (this.array.length == 0 || (this.index + 1) >= this.array.length) return false;
+  this.index += 1;
+  return true;
+}
+ArraySeq.prototype.current = function() {
+  return this.array[this.index];
+}
+logFive(new ArraySeq([1, 2]));
+
+function RangeSeq(from, to) {
+  this.pos = from - 1;
+  this.to = to;
+}
+RangeSeq.prototype.next = function() {
+  if (this.pos >= this.to)
+    return false;
+  this.pos++;
+  return true;
+};
+RangeSeq.prototype.current = function() {
+  return this.pos;
+};
+
+logFive(new RangeSeq(100, 1000));
