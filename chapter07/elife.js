@@ -40,7 +40,41 @@ Grid.prototype.set = function(vector, value) {
   this.space[vector.x + this.width * vector.y] = value;
 };
 
-var grid = new Grid(5,5);
-console.log(grid.get(new Vector(1, 1)));
-grid.set(new Vector(1, 1), "X");
-console.log(grid.get(new Vector(1, 1)));
+var directions = {
+  "n":  new Vector( 0, -1),
+  "ne": new Vector( 1, -1),
+  "e":  new Vector( 1,  0),
+  "se": new Vector( 1,  1),
+  "s":  new Vector( 0,  1),
+  "sw": new Vector(-1,  1),
+  "w":  new Vector(-1,  0),
+  "nw": new Vector(-1, -1)
+};
+
+function randomElement(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
+var directonNames = "n ne e se s sw w nw".split(" ");
+
+function BouncingCritter() {
+  this.direction = randomElement(directionNames);
+}
+
+BouncingCritter.prototype.act = function(view) {
+  if (view.look(this.direction) != " ")
+    this.direction = view.find(" ") || "s"
+  return {type: "move", direction: this.direction};
+};
+
+function elementFromChar(legend, ch) {
+  if (ch == " ")
+    return null;
+  var element = new legend[ch]();
+  element.originChar = ch;
+  return element;
+}
+
+function World(map, legend) {
+  var grid = new Grid(map[0].length, map.length)
+}
