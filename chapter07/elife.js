@@ -55,7 +55,7 @@ function randomElement(array) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-var directonNames = "n ne e se s sw w nw".split(" ");
+var directionNames = "n ne e se s sw w nw".split(" ");
 
 function BouncingCritter() {
   this.direction = randomElement(directionNames);
@@ -76,5 +76,38 @@ function elementFromChar(legend, ch) {
 }
 
 function World(map, legend) {
-  var grid = new Grid(map[0].length, map.length)
+  var grid = new Grid(map[0].length, map.length);
+  this.grid = grid;
+  this.legend = legend;
+
+  map.forEach(function(line, y) {
+    for (var x = 0; x < line.length; x++) {
+      grid.set(new Vector(x, y), elementFromChar(legend, line[x]));
+    }
+  });
 }
+
+function charFromElement(element) {
+  if (element == null)
+    return " ";
+  else
+    return element.originChar;
+}
+
+World.prototype.toString = function() {
+  var output = "";
+  for (var y = 0; y < this.grid.height; y++) {
+    for (var x = 0; x < this.grid.width; x++) {
+      var element = this.grid.get(new Vector(x, y));
+      output += charFromElement(element);
+    }
+    output += "\n";
+  }
+  return output;
+};
+
+function Wall() {}
+
+var world = new World(plan, {"#": Wall,
+                             "o": BouncingCritter});
+console.log(world.toString());
