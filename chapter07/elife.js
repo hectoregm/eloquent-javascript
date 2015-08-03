@@ -63,7 +63,7 @@ function BouncingCritter() {
 
 BouncingCritter.prototype.act = function(view) {
   if (view.look(this.direction) != " ")
-    this.direction = view.find(" ") || "s"
+    this.direction = view.find(" ") || "s";
   return {type: "move", direction: this.direction};
 };
 
@@ -110,11 +110,10 @@ function Wall() {}
 
 var world = new World(plan, {"#": Wall,
                              "o": BouncingCritter});
-console.log(world.toString());
 
 Grid.prototype.forEach = function(f, context) {
   for (var y = 0; y < this.height; y++) {
-    for (var x = 0; x < this.length; x++) {
+    for (var x = 0; x < this.width; x++) {
       var value = this.space[x + y * this.width];
       if (value != null)
         f.call(context, value, new Vector(x, y));
@@ -152,7 +151,7 @@ World.prototype.checkDestination = function(action, vector) {
 }
 
 function View(world, vector) {
-  this.word = world;
+  this.world = world;
   this.vector = vector;
 }
 View.prototype.look = function(dir) {
@@ -174,3 +173,8 @@ View.prototype.find = function(ch) {
   if (found.length == 0) return null;
   return randomElement(found);
 };
+
+for (var i = 0; i < 5; i++) {
+  world.turn();
+  console.log(world.toString());
+}
