@@ -42,3 +42,31 @@ function require(name) {
 }
 
 require.cache = Object.create(null);
+
+var defineCache = Object.create(null);
+var currentMod = null;
+
+function getModule(name) {
+  if (name in defineCache)
+    return defineCache[name];
+
+    var module = { exports: null,
+                   loaded: false,
+                   onLoad: [] };
+    defineCache[name] = module;
+    backgroundReadFile(name, function(code) {
+      currentMod = module;
+      new Function("", code)();
+    });
+    return module;
+}
+
+function define(depNames, moduleFunction) {
+  var myMod = currentMod;
+  var deps = depNames.map(getModule);
+
+  deps.forEach(function(mod) {
+    if (!mod.loaded)
+      mod.onLoad.push(whenDepsLoaded);
+  });
+}
