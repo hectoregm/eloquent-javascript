@@ -40,3 +40,5 @@ function require(name) {
   require.cache[name] = module.exports;
   return module.exports;
 }
+
+require.cache = Object.create(null);
