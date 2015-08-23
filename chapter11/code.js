@@ -18,3 +18,31 @@ function skipSpace(string) {
   if (first == -1) return "";
   return string.slice(first);
 }
+
+function parseApply(expr, program) {
+  program = skipSpace(program);
+  if (program[0] != "(")
+    return { expr: expr, rest: program }
+
+  program = skipSpace(program.slice(1));
+  expr = { type: "apply", operator: expr, args: [] };
+  while (program[0] != ")") {
+    var arg = parseExpression(program);
+    expr.args.push(arg.expr);
+    program = skipSpace(arg.rest);
+    if (program[0] == ",")
+      program = skipSpace(program.slice(1));
+    else if (program[0] != ")")
+      throw new SyntaxError("Expected ',' or ')'");
+  }
+  return parseApply(expr, program.slice(1));
+}
+
+function parse(program) {
+  var result = parseExpression(program);
+  if (skipSpace(result.rest).length > 0)
+    throw new SyntaxError("Unexpected text after program");
+  return result.expr;
+}
+
+console.log(parse("+(a, 10)"))
