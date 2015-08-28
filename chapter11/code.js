@@ -81,3 +81,22 @@ specialForms["if"] = function(args, env) {
     else
       return evaluate(args[2], env);
 };
+
+specialForms["while"] = function(args, env) {
+  if (args.length != 2)
+    throw new SyntaxError("Bad number of args to while");
+
+  while (evaluate(args[0], env) !== false)
+    evaluate(args[1], env);
+
+  return false;
+}
+
+specialForms["do"] = function(args, env) {
+  var value = false;
+  args.forEach(function(arg) {
+    value = evaluate(arg, env);
+  });
+
+  return value;
+}
