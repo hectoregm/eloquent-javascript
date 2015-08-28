@@ -90,13 +90,23 @@ specialForms["while"] = function(args, env) {
     evaluate(args[1], env);
 
   return false;
-}
+};
 
 specialForms["do"] = function(args, env) {
   var value = false;
   args.forEach(function(arg) {
     value = evaluate(arg, env);
   });
+
+  return value;
+};
+
+specialForms["define"] = function(args, env) {
+  if (args.length != 2 || args[0].type != "word")
+    throw new SyntaxError("Bad use of define");
+
+  var value = evaluate(args[1], env);
+  env[args[0].name] = value;
 
   return value;
 }
