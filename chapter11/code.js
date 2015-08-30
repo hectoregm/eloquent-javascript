@@ -119,3 +119,25 @@ topEnv["false"] = false;
 var prog = parse("if(true, false, true)");
 console.log(prog);
 console.log(evaluate(prog, topEnv));
+
+["+", "-", "*", "/", "==", "<", ">"].forEach(function(op) {
+  topEnv[op] = new Function("a, b", "return a " + op + " b;");
+});
+
+topEnv["print"] = function(value) {
+  console.log(value);
+  return value;
+}
+
+function run() {
+  var env = Object.create(topEnv);
+  var program = Array.prototype.slice.call(arguments, 0).join("\n");
+  return evaluate(parse(program), env);
+}
+
+run("do(define(total, 0),",
+    "   define(count, 1),",
+    "   while(<(count, 11),",
+    "         do(define(total, +(total, count)),",
+    "            define(count, +(count, 1)))),",
+    "   print(total))");
