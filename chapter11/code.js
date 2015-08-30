@@ -110,3 +110,12 @@ specialForms["define"] = function(args, env) {
 
   return value;
 }
+
+var topEnv = Object.create(null);
+
+topEnv["true"] = true;
+topEnv["false"] = false;
+
+var prog = parse("if(true, false, true)");
+console.log(prog);
+console.log(evaluate(prog, topEnv));
