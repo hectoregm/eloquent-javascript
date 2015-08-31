@@ -141,3 +141,25 @@ run("do(define(total, 0),",
     "         do(define(total, +(total, count)),",
     "            define(count, +(count, 1)))),",
     "   print(total))");
+
+specialForms["fun"] = function(args, env) {
+  if (!args.length)
+    throw new SyntaxError("Functions need a body");
+  function name(expr) {
+    if (expr.type != "word")
+      throw new SyntaxError("Arg names must be words");
+      return expr.name;
+  }
+  var argNames = args.slice(0, args.length - 1).map(name);
+  var body = args[args.length - 1];
+
+  return function() {
+    if (arguments.length != argNames.length)
+      throw new TypeError("Wrong number of arguments");
+    var localEnv = Object.create(env);
+    for (var i = 0; i < arguments.length; i++)
+      localEnv[argNames[i]] = arguments[i];
+
+    return evaluate(body, localEnv);
+  };
+};
