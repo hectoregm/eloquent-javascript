@@ -163,3 +163,12 @@ specialForms["fun"] = function(args, env) {
     return evaluate(body, localEnv);
   };
 };
+
+run("do(define(plusOne, fun(a, +(a, 1))),",
+    "   print(plusOne(10)))");
+
+run("do(define(pow, fun(base, exp,",
+    "     if(==(exp, 0),",
+    "        1,",
+    "        *(base, pow(base, -(exp, 1)))))),",
+    "   print(pow(2, 10)))");
