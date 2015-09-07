@@ -6,3 +6,6 @@ function once() {
 }
 
 button.addEventListener("click", done);
+
+
+var para = document.querySelector("p");

@@ -1,0 +1,21 @@
+<!doctype html>
+<head>
+  <title>Censored Keyboard</title>
+</head>
+<body>
+  <div>
+    <input type="text">
+  </div>
+  <script>
+    var field = document.querySelector("input");
+    var timeout;
+    field.addEventListener("keypress", function(event) {
+      clearTimeout(timeout);
+      console.log(String.fromCharCode(event.charCode));
+      console.log(field.value);
+      timeout = setTimeout(function() {
+        field.value = field.value.replace(/[QqWwXx]/g, '');
+      }, 500);
+    });
+  </script>
+</body>
