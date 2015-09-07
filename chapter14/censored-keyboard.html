@@ -8,14 +8,11 @@
   </div>
   <script>
     var field = document.querySelector("input");
-    var timeout;
-    field.addEventListener("keypress", function(event) {
-      clearTimeout(timeout);
-      console.log(String.fromCharCode(event.charCode));
-      console.log(field.value);
-      timeout = setTimeout(function() {
-        field.value = field.value.replace(/[QqWwXx]/g, '');
-      }, 500);
+    field.addEventListener("keydown", function(event) {
+      if (event.keyCode == "Q".charCodeAt(0) ||
+          event.keyCode == "W".charCodeAt(0) ||
+          event.keyCode == "X".charCodeAt(0))
+        event.preventDefault();
     });
   </script>
 </body>
