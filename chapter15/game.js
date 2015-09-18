@@ -54,6 +54,12 @@ Vector.prototype.times = function(factor) {
   return new Vector(this.x * factor, this.y * factor);
 }
 
+var actorChars = {
+  "@": Player,
+  "o": Coin,
+  "=": Lava, "|": Lava, "v": Lava
+};
+
 function Player(pos) {
   this.pos = pos.plus(new Vector(0, -0.5));
   this.size = new Vector(0.8, 1.5);
@@ -73,3 +79,13 @@ function Lava(pos, ch) {
   }
 }
 Lava.prototype.type = "lava";
+
+function Coin(pos) {
+  this.basePos = this.pos = pos.plus(new Vector(0.2, 0.1));
+  this.size = new Vector(0.6, 0.6);
+  this.wooble = Math.random() * Math.PI * 2
+}
+Coin.prototype.type = "coin";
+
+var simpleLevel = new Level(simpleLevelPlan);
+console.log(simpleLevel.width, "by", simpleLevel.height);
