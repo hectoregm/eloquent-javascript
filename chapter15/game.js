@@ -150,7 +150,7 @@ DOMDisplay.prototype.scrollPlayerIntoView = function() {
   var top = this.wrap.scrollTop, bottom = top + height;
 
   var player = this.level.player;
-  var center = player.pos.plus(player.size.times(0.5)).times(scale));
+  var center = player.pos.plus(player.size.times(0.5)).times(scale);
 
   if (center.x < left + margin)
     this.wrap.scrollLeft = center.x - margin;
