@@ -65,6 +65,7 @@ function Player(pos) {
   this.size = new Vector(0.8, 1.5);
   this.speed = new Vector(0,0);
 }
+Player.prototype.type = "player";
 
 function Lava(pos, ch) {
   this.pos = pos;
@@ -114,7 +115,7 @@ DOMDisplay.prototype.drawBackground = function() {
     var rowElt = table.appendChild(elt("tr"));
     rowElt.style.height = scale + "px";
     row.forEach(function(type) {
-      rowElt.appendChild(elt("td"), type);
+      rowElt.appendChild(elt("td", type));
     });
   });
   return table;
@@ -135,9 +136,10 @@ DOMDisplay.prototype.drawActors = function() {
 DOMDisplay.prototype.drawFrame = function() {
   if (this.actorLayer)
     this.wrap.removeChild(this.actorLayer);
-    this.actorLayer = this.wrap.appendChild(this.drawActors());
-    this.wrap.className = "grame " + (this.level.status || "");
-    this.scrollPlayerIntoView();
+
+  this.actorLayer = this.wrap.appendChild(this.drawActors());
+  this.wrap.className = "grame " + (this.level.status || "");
+  this.scrollPlayerIntoView();
 };
 
 DOMDisplay.prototype.scrollPlayerIntoView = function() {
@@ -150,6 +152,7 @@ DOMDisplay.prototype.scrollPlayerIntoView = function() {
   var top = this.wrap.scrollTop, bottom = top + height;
 
   var player = this.level.player;
+  console.log(player);
   var center = player.pos.plus(player.size.times(0.5)).times(scale);
 
   if (center.x < left + margin)
@@ -160,4 +163,8 @@ DOMDisplay.prototype.scrollPlayerIntoView = function() {
     this.wrap.scrollTop = center.y - margin;
   else if (center.y > bottom - margin)
     this.wrap.scrollTop = center.y + margin - height;
+};
+
+DOMDisplay.prototype.clear = function() {
+  this.wrap.parentNode.removeChild(this.wrap);
 };
