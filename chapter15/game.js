@@ -16,7 +16,7 @@ function Level(plan) {
   this.grid = [];
   this.actors = [];
 
-  for (var y = 0;  y < this.height; y++) {
+  for (var y = 0; y < this.height; y++) {
     var line = plan[y], gridLine = [];
     for (var x = 0; x < this.width; x++) {
       var ch = line[x], fieldType = null;
@@ -32,7 +32,7 @@ function Level(plan) {
     this.grid.push(gridLine);
   }
 
-  this.player = this.actors.filter(function (actor) {
+  this.player = this.actors.filter(function(actor) {
     return actor.type == "player";
   })[0];
   this.status = this.finishDelay = null;
@@ -45,14 +45,12 @@ Level.prototype.isFinished = function() {
 function Vector(x, y) {
   this.x = x; this.y = y;
 }
-
 Vector.prototype.plus = function(other) {
   return new Vector(this.x + other.x, this.y + other.y);
 };
-
 Vector.prototype.times = function(factor) {
   return new Vector(this.x * factor, this.y * factor);
-}
+};
 
 var actorChars = {
   "@": Player,
@@ -63,7 +61,7 @@ var actorChars = {
 function Player(pos) {
   this.pos = pos.plus(new Vector(0, -0.5));
   this.size = new Vector(0.8, 1.5);
-  this.speed = new Vector(0,0);
+  this.speed = new Vector(0, 0);
 }
 Player.prototype.type = "player";
 
@@ -84,12 +82,11 @@ Lava.prototype.type = "lava";
 function Coin(pos) {
   this.basePos = this.pos = pos.plus(new Vector(0.2, 0.1));
   this.size = new Vector(0.6, 0.6);
-  this.wooble = Math.random() * Math.PI * 2
+  this.wobble = Math.random() * Math.PI * 2;
 }
 Coin.prototype.type = "coin";
 
 var simpleLevel = new Level(simpleLevelPlan);
-console.log(simpleLevel.width, "by", simpleLevel.height);
 
 function elt(name, className) {
   var elt = document.createElement(name);
@@ -119,12 +116,13 @@ DOMDisplay.prototype.drawBackground = function() {
     });
   });
   return table;
-}
+};
 
 DOMDisplay.prototype.drawActors = function() {
   var wrap = elt("div");
   this.level.actors.forEach(function(actor) {
-    var rect = wrap.appendChild(elt("div", "actor " + actor.type));
+    var rect = wrap.appendChild(elt("div",
+                                    "actor " + actor.type));
     rect.style.width = actor.size.x * scale + "px";
     rect.style.height = actor.size.y * scale + "px";
     rect.style.left = actor.pos.x * scale + "px";
@@ -136,24 +134,23 @@ DOMDisplay.prototype.drawActors = function() {
 DOMDisplay.prototype.drawFrame = function() {
   if (this.actorLayer)
     this.wrap.removeChild(this.actorLayer);
-
   this.actorLayer = this.wrap.appendChild(this.drawActors());
-  this.wrap.className = "grame " + (this.level.status || "");
+  this.wrap.className = "game " + (this.level.status || "");
   this.scrollPlayerIntoView();
 };
 
 DOMDisplay.prototype.scrollPlayerIntoView = function() {
   var width = this.wrap.clientWidth;
   var height = this.wrap.clientHeight;
-  var margin = width / 3
+  var margin = width / 3;
 
-  // The viewsport
+  // The viewport
   var left = this.wrap.scrollLeft, right = left + width;
   var top = this.wrap.scrollTop, bottom = top + height;
 
   var player = this.level.player;
-  console.log(player);
-  var center = player.pos.plus(player.size.times(0.5)).times(scale);
+  var center = player.pos.plus(player.size.times(0.5))
+                 .times(scale);
 
   if (center.x < left + margin)
     this.wrap.scrollLeft = center.x - margin;
