@@ -1,0 +1,23 @@
+<!doctype html>
+<head>
+  <title>Examples from Chapter 16</title>
+</head>
+<body>
+  <p>Before canvas.</p>
+  <canvas id="canvas1" width="120" height="60"></canvas>
+  <p>After canvas.</p>
+  <script>
+    var canvas = document.querySelector("#canvas1");
+    var context = canvas.getContext("2d");
+    context.fillStyle = "red";
+    context.fillRect(10, 10 , 100, 50);
+  </script>
+  <canvas id="canvas2" width="300" height="300"></canvas>
+  <script type="text/javascript">
+    var cx = document.querySelector("#canvas2").getContext("2d");
+    cx.strokeStyle = "blue";
+    cx.strokeRect(5, 5, 50, 50);
+    cx.lineWidth = 5;
+    cx.strokeRect(135, 5, 50, 50);
+  </script>
+</body>
