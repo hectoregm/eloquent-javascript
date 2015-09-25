@@ -178,7 +178,7 @@ Level.prototype.obstacleAt = function(pos, size) {
     return "lava";
 
   for (var y = yStart; y < yEnd; y++) {
-    for (var x = xStart; x < xEnd, x++) {
+    for (var x = xStart; x < xEnd; x++) {
       var fieldType = this.grid[y][x];
       if (fieldType) return fieldType;
     }
@@ -195,4 +195,29 @@ Level.prototype.actorAt = function(actor) {
         actor.pos.y < other.pos.y + other.size.y)
       return other;
   }
+};
+
+var maxStep = 0.05;
+
+Level.prototype.animate = function(step, keys) {
+  if (this.status != null)
+    this.finishDelay -= step;
+
+  while (step > 0) {
+    var thisStep = Math.min(step, maxStep);
+    this.actors.forEach(function(actor) {
+      actor.act(thisStep, this, keys);
+    }, this);
+    step -= thisStep;
+  }
+};
+
+Lava.prototype.act = function(step, level) {
+  var newPos = this.pos.plus(this.speed.times(step));
+  if (!level.obstacleAt(newPos, this.size))
+    this.pos = newPos;
+  else if (this.repeatPos)
+    this.pos = this.repeatPos;
+  else
+    this.speed = this.speed.times(-1);
 };
