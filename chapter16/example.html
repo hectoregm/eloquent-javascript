@@ -66,4 +66,28 @@
     cx.closePath();
     cx.stroke();
   </script>
+  <p>Arc example</p>
+  <canvas id="canvas7"></canvas>
+  <script type="text/javascript">
+    var cx = document.querySelector("#canvas7").getContext("2d");
+    cx.beginPath();
+    cx.moveTo(10, 10);
+    // control =(90, 10) goal-(90,90) radius=20
+    cx.arcTo(90, 10, 90, 90, 20);
+    cx.moveTo(10, 10);
+    // contro=(90,10) goal=(90,90) radius=80
+    cx.arcTo(90, 10, 90, 90, 80);
+    cx.stroke();
+  </script>
+  <p>Full Arc example</p>
+  <canvas id="canvas8"></canvas>
+  <script type="text/javascript">
+    var cx = document.querySelector("#canvas8").getContext("2d");
+    cx.beginPath();
+    // center=(50,50) radius=40 angle=0 to 7
+    cx.arc(50, 50, 40, 0, 7);
+    // center=(150, 50) radius=40 angle=0 to pi 1/2
+    cx.arc(150, 50, 40, 0, 0.5 * Math.PI);
+    cx.stroke();
+  </script>
 </body>
