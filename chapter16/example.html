@@ -125,4 +125,14 @@
     cx.fillStyle = "fuchsia";
     cx.fillText("I can draw text, too!", 10, 50);
   </script>
+  <p>Transformation example</p>
+  <canvas id="canvas11"></canvas>
+  <script type="text/javascript">
+    var cx = document.querySelector("#canvas11").getContext("2d");
+    cx.scale(3, 0.5);
+    cx.beginPath();
+    cx.arc(50,50, 40, 0, 7)
+    cx.lineWidth = 3;
+    cx.stroke();
+  </script>
 </body>
