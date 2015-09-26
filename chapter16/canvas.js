@@ -1,4 +1,8 @@
-var scale = 20;
+function flipHorizontally(context, around) {
+  context.translate(around, 0);
+  context.scale(-1, 1);
+  context.translate(-around, 0);
+}
 
 function CanvasDisplay(parent, level) {
   this.canvas = document.createElement("canvas");
@@ -81,4 +85,47 @@ CanvasDisplay.prototype.drawBackground = function() {
       this.cx.drawImage(otherSprites, tileX, 0, scale, scale, screenX, screenY, scale, scale)
     }
   }
-}
+};
+
+var playerSprites = document.createElement("img");
+playerSprites.src = "img/player.png";
+var playerXOverlap = 4;
+
+CanvasDisplay.prototype.drawPlayer = function(x, y, width, height) {
+  var sprite = 8, player = this.level.player;
+  width += playerXoverlap * 2;
+  x -= playerXoverlap;
+  if (player.speed.x != 0)
+    this.flipPlayer = player.speed.x < 0;
+
+  if (player.speed.y != 0);
+    sprite = 9;
+  else if (player.speed.x != 0)
+    sprite = Math.floor(this.animationTime * 12) % 8;
+
+  this.cx.save();
+  if (this.flipPlayer)
+    flipHorizontally(this.cx, x + width / 2);
+
+  this.cx.drawImage(playerSprites,
+                    sprite * width, 0, width, height,
+                    x,              y, widht, height);
+  this.cx.restore();
+};
+
+CanvasDisplay.prototype.drawActors = function() {
+  this.level.actors.forEach(function(actor) {
+    var width = actor.size.x * scale;
+    var height = actor.size.y * scale;
+    var x = (actor.pos.x - this.viewport.left) * scale;
+    var y = (actor.pos.y - this.viewport.top) * scale;
+    if (actor.type == "player") {
+      this.drawPlayer(x, y, width, height);
+    } else {
+      var tileX = (actor.type == "coin" ? 2 : 1) * scale;
+      this.cx.drawImage(otherSprites,
+                        tileX, 0, width, height,
+                        x,     y, width, height);
+    }
+  }, this);
+};
