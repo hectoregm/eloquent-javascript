@@ -80,7 +80,7 @@ CanvasDisplay.prototype.drawBackground = function() {
       var tile = this.level.grid[y][x];
       if (tile == null) continue;
       var screenX = (x - view.left) * scale;
-      var screenY = (x - view.top) * scale;
+      var screenY = (y - view.top) * scale;
       var tileX = tile == "lava" ? scale : 0;
       this.cx.drawImage(otherSprites, tileX, 0, scale, scale, screenX, screenY, scale, scale)
     }
@@ -93,12 +93,12 @@ var playerXOverlap = 4;
 
 CanvasDisplay.prototype.drawPlayer = function(x, y, width, height) {
   var sprite = 8, player = this.level.player;
-  width += playerXoverlap * 2;
-  x -= playerXoverlap;
+  width += playerXOverlap * 2;
+  x -= playerXOverlap;
   if (player.speed.x != 0)
     this.flipPlayer = player.speed.x < 0;
 
-  if (player.speed.y != 0);
+  if (player.speed.y != 0)
     sprite = 9;
   else if (player.speed.x != 0)
     sprite = Math.floor(this.animationTime * 12) % 8;
@@ -109,7 +109,7 @@ CanvasDisplay.prototype.drawPlayer = function(x, y, width, height) {
 
   this.cx.drawImage(playerSprites,
                     sprite * width, 0, width, height,
-                    x,              y, widht, height);
+                    x,              y, width, height);
   this.cx.restore();
 };
 
